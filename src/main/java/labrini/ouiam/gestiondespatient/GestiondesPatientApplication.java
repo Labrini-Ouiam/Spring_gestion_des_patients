@@ -1,9 +1,7 @@
 package labrini.ouiam.gestiondespatient;
 
-import labrini.ouiam.gestiondespatient.entities.Medecin;
-import labrini.ouiam.gestiondespatient.entities.Patient;
-import labrini.ouiam.gestiondespatient.entities.RendezVous;
-import labrini.ouiam.gestiondespatient.entities.StatusRDV;
+import labrini.ouiam.gestiondespatient.entities.*;
+import labrini.ouiam.gestiondespatient.repositories.ConsultationRepository;
 import labrini.ouiam.gestiondespatient.repositories.MedcinRepository;
 import labrini.ouiam.gestiondespatient.repositories.PatientRepository;
 import labrini.ouiam.gestiondespatient.repositories.RendezVousRepository;
@@ -23,7 +21,7 @@ public class GestiondesPatientApplication {
     }
 
     @Bean
-    CommandLineRunner start(PatientRepository patientRepository, MedcinRepository medcinRepository, RendezVousRepository rendezVousRepository ) {
+    CommandLineRunner start(PatientRepository patientRepository, MedcinRepository medcinRepository, RendezVousRepository rendezVousRepository , ConsultationRepository consultationRepository) {
         return args -> {
             Stream.of("OUIAM","KAWTAR","RABIAA")
                     .forEach(name -> {
@@ -55,6 +53,14 @@ public class GestiondesPatientApplication {
             rendezVous.setStatus(StatusRDV.PENDING);
             rendezVous.setDate(new Date());
             rendezVousRepository.save(rendezVous);
+
+
+            RendezVous rendezVous2=rendezVousRepository.findById(1L).orElse(null);
+            Consultation consultation=new Consultation();
+            consultation.setDateConsultation(new Date());
+            consultation.setRendezVous(rendezVous2);
+            consultation.setRapport("Rapport de consultation .......");
+            consultationRepository.save(consultation);
 
 
         };
