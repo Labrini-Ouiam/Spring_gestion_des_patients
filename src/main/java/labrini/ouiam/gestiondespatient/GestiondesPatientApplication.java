@@ -1,5 +1,6 @@
 package labrini.ouiam.gestiondespatient;
 
+import labrini.ouiam.gestiondespatient.Service.IHospitalService;
 import labrini.ouiam.gestiondespatient.entities.*;
 import labrini.ouiam.gestiondespatient.repositories.ConsultationRepository;
 import labrini.ouiam.gestiondespatient.repositories.MedcinRepository;
@@ -21,7 +22,7 @@ public class GestiondesPatientApplication {
     }
 
     @Bean
-    CommandLineRunner start(PatientRepository patientRepository, MedcinRepository medcinRepository, RendezVousRepository rendezVousRepository , ConsultationRepository consultationRepository) {
+    CommandLineRunner start(IHospitalService hospitalService,PatientRepository patientRepository,RendezVousRepository rendezVousRepository,ConsultationRepository consultationRepository,MedcinRepository medcinRepository) {
         return args -> {
             Stream.of("OUIAM","KAWTAR","RABIAA")
                     .forEach(name -> {
@@ -29,7 +30,7 @@ public class GestiondesPatientApplication {
                         patient.setNom(name);
                         patient.setMalade(false);
                         patient.setDateNaissance(new Date());
-                        patientRepository.save(patient);
+                        hospitalService.savePatient(patient);
                     });
 
             Stream.of("Lahcen","mourad","jihane")
@@ -38,7 +39,7 @@ public class GestiondesPatientApplication {
                         medecin.setNom(name);
                         medecin.setEmail(name+"@gmail.com");
                         medecin.setSpecialite(Math.random()>0.5?"Cardio":"Dentiste");
-                        medcinRepository.save(medecin);
+                        hospitalService.saveMedecin(medecin);
                     });
 
             Patient patient = patientRepository.findById(1L).orElse(null);
@@ -60,7 +61,7 @@ public class GestiondesPatientApplication {
             consultation.setDateConsultation(new Date());
             consultation.setRendezVous(rendezVous2);
             consultation.setRapport("Rapport de consultation .......");
-            consultationRepository.save(consultation);
+            hospitalService.saveConsultation(consultation);
 
 
         };
